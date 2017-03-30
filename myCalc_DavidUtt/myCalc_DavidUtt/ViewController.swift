@@ -35,25 +35,50 @@ class ViewController: UIViewController {
     var labelString: String = "0"
 
     @IBAction func didPressClear(_ sender: UIButton) {
-    
+        savedNum = 0;
+        currentMode = .not_set
+        lastButtonWasMode = false
+        labelString = "0"
+        
+        updateText()
     }
     
     @IBAction func didPressNumber(_ sender: UIButton) {
-    
+        if (lastButtonWasMode){
+            lastButtonWasMode = false
+            labelString = "0"
+        }
+        
+        let stringValue:String? = sender.titleLabel?.text
+        labelString = labelString.appending(stringValue!)
+        
+        updateText()
     }
     
     @IBAction func didPressPlus(_ sender: UIButton) {
-    
+        changeMode(newMode: .addition)
     }
     
     @IBAction func didPressEquals(_ sender: UIButton) {
     }
     
     func changeMode(newMode:modes){
-    
+        if (savedNum == 0){
+            return
+        }
+        
+        currentMode = newMode
+        lastButtonWasMode = true
     }
     
     func updateText(){
+        guard let labelInt:Int = Int(labelString) else {
+            return
+        }
+        if (currentMode == .not_set) {
+            savedNum = labelInt
+        }
+         myLable.text = "\(labelInt)"
     
     }
     
